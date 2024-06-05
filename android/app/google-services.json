@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "123510033549",
+    "project_id": "innodify-db",
+    "storage_bucket": "innodify-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123510033549:android:c4e4e9fcdb1496b85526c4",
+        "android_client_info": {
+          "package_name": "com.innodify.Sauda2Sale"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoPfxZMbF1nWJDeh6-5H3baJ26-zf8-HY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123510033549:android:5f5c33c51d0a085f5526c4",
+        "android_client_info": {
+          "package_name": "com.innodifyVendor.RishaCreations"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoPfxZMbF1nWJDeh6-5H3baJ26-zf8-HY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
