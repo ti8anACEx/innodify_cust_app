@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:innodify_cust_app/commons/widgets/custom_button.dart';
-import 'package:innodify_cust_app/commons/widgets/custom_search_bar.dart';
 import 'package:innodify_cust_app/commons/widgets/store_branding.dart';
 import 'package:innodify_cust_app/confidential/vendor_options.dart';
 import 'package:innodify_cust_app/constants/colors.dart';
@@ -56,7 +55,7 @@ class OnboardPage extends StatelessWidget {
                   ),
                 ),
                 7.heightBox,
-                showCarouselSlider(homeController, context),
+                Obx(() => showCarouselSlider(homeController, context)),
                 7.heightBox,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,78 +113,75 @@ class OnboardPage extends StatelessWidget {
 
   Widget showCarouselSlider(
       HomeController homeController, BuildContext context) {
-    return Obx(
-      () => homeController.isCarouselImagesLoading.value
-          ? SizedBox(
-              width: context.screenWidth,
-              child: Center(
-                  child: LinearProgressIndicator(
-                color: whiteColor,
-                backgroundColor: transparentColor,
-              )),
-            )
-          : Column(
-              children: [
-                CarouselSlider(
-                  items: homeController.carouseImages
-                      .map(
-                        (item) => Padding(
-                            // !!!---MANIPULATE THE CHILD HERE---!!!
-                            padding: const EdgeInsets.symmetric(horizontal: 7),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(item),
-                                        fit: BoxFit.cover)),
-                              ),
-                            )),
-                      )
-                      .toList(),
-                  carouselController: homeController.carouselController,
-                  options: CarouselOptions(
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    autoPlay: true,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      homeController.carouselsIndex.value = index;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // DOTS ROW
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:
-                      homeController.carouseImages.asMap().entries.map((entry) {
-                    return GestureDetector(
-                      onTap: () => homeController.carouselController
-                          .animateToPage(entry.key),
-                      child: Obx(
-                        () => AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          width:
-                              homeController.carouselsIndex.value == entry.key
-                                  ? 18
-                                  : 5,
-                          height: 3.5,
-                          margin: const EdgeInsets.symmetric(horizontal: 3),
-                          decoration: BoxDecoration(
+    return homeController.carouseImages.isEmpty
+        ? SizedBox(
+            width: context.screenWidth,
+            child: Center(
+                child: LinearProgressIndicator(
+              color: blackColor,
+              backgroundColor: transparentColor,
+            )),
+          )
+        : Column(
+            children: [
+              CarouselSlider(
+                items: homeController.carouseImages
+                    .map(
+                      (item) => Padding(
+                          // !!!---MANIPULATE THE CHILD HERE---!!!
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            color:
-                                homeController.carouselsIndex.value == entry.key
-                                    ? blackColor
-                                    : fontGrey,
-                          ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(item),
+                                      fit: BoxFit.cover)),
+                            ),
+                          )),
+                    )
+                    .toList(),
+                carouselController: homeController.carouselController,
+                options: CarouselOptions(
+                  scrollPhysics: const BouncingScrollPhysics(),
+                  autoPlay: true,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    homeController.carouselsIndex.value = index;
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              // DOTS ROW
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+                    homeController.carouseImages.asMap().entries.map((entry) {
+                  return GestureDetector(
+                    onTap: () => homeController.carouselController
+                        .animateToPage(entry.key),
+                    child: Obx(
+                      () => AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
+                        width: homeController.carouselsIndex.value == entry.key
+                            ? 18
+                            : 5,
+                        height: 3.5,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color:
+                              homeController.carouselsIndex.value == entry.key
+                                  ? blackColor
+                                  : fontGrey,
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 22),
-              ],
-            ),
-    );
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 22),
+            ],
+          );
   }
 }

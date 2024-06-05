@@ -80,10 +80,6 @@ class CartController extends GetxController {
   }
 
   Future<void> generateReceiptAndOrderNow() async {
-    if (cartItems.isEmpty) {
-      Get.snackbar("Failed", 'Your Cart is empty!');
-      return;
-    }
     itemsForPdf.clear();
     final String invoiceId = const Uuid().v1();
     final now = DateFormat.yMMMEd().format(DateTime.now());
@@ -110,10 +106,10 @@ class CartController extends GetxController {
     String msg = '''
 Got an Order Receipt.
 Download the Receipt PDF here:
-$downloadUrl
+${Uri.encodeFull(dwnldUrl)}
 ''';
 
-    downloadUrl == "web-contdition-unhandled" || downloadUrl == "error"
+    dwnldUrl == "web-contdition-unhandled" || dwnldUrl == "error"
         ? Get.snackbar(
             'Attention', 'Failed to redirect to Chat, or the platorm is web')
         : launchTheUrl(getWhatsappOrderLink(

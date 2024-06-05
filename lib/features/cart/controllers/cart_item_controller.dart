@@ -5,10 +5,13 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:innodify_cust_app/features/auth/controllers/auth_controller.dart';
+import 'package:innodify_cust_app/features/cart/controllers/cart_controller.dart';
+import 'package:innodify_cust_app/features/home/controllers/home_controller.dart';
 import 'package:innodify_cust_app/features/home/controllers/item_controller.dart';
 import '../../product_details/pages/product_details_page.dart';
 
 class CartItemController extends GetxController {
+  CartController cartController = Get.find(tag: 'cart-controller');
   DocumentSnapshot<Object?> item;
   late Map<String, dynamic>? data;
 
@@ -35,7 +38,7 @@ class CartItemController extends GetxController {
         for (final doc in querySnapshot.docs) {
           await doc.reference.delete();
         }
-        Get.back();
+        cartController.fetchCartItems();
         log('Documents deleted successfully!');
       } else {
         log('No documents found matching the criteria.');

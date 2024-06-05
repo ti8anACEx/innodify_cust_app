@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 class VendorOptions extends GetxController {
   static String abidLast = vendorStoreName;
 
-  static const String vendorId = 'VsC3yIM3nkPDi05uy35EqcVSiql2';
+  static const String vendorId = 'Pk9Yr4L9EgNRtlqMlIwUhT63Q7x2';
   static String vendorAppBundleId = 'com.innodifyVendor.$abidLast';
 
-  static const String vendorPhoneNumber = '101';
+  static const String vendorPhoneNumber = '6505551234';
   static const String vendorEmail = 'jit@gmail.com';
   static const String vendorUsername = 'jit';
   static const String vendorOwnerName = 'jit';

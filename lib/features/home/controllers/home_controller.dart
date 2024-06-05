@@ -31,11 +31,7 @@ class HomeController extends GetxController {
 
   RxList<DocumentSnapshot> searchedItems = <DocumentSnapshot>[].obs;
   RxList<DocumentSnapshot> items = <DocumentSnapshot>[].obs;
-  RxList<String> carouseImages = <String>[
-    "https://plus.unsplash.com/premium_photo-1714115034964-16b20994142a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8",
-    "https://images.unsplash.com/photo-1714548529006-aea2b7530e6e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8",
-    "https://images.unsplash.com/photo-1714508862788-44e45c4315d0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8",
-  ].obs;
+  RxList<String> carouseImages = <String>[].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   AuthController authController = Get.find(tag: 'auth-controller');
@@ -44,8 +40,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     // fetchPosts(); // interchangeable with fetchItems
-    numberOfCartItems();
     fetchCarouselmages();
+    numberOfCartItems();
   }
 
   void updateCurrentTag(String text) {
@@ -117,9 +113,10 @@ class HomeController extends GetxController {
       searchedItems.clear();
       QuerySnapshot querySnapshot = await firestore
           .collection('items')
-          .where('pushedProductName',
-              isGreaterThanOrEqualTo: searchController.text)
+          .where('vendorUid', isEqualTo: VendorOptions.vendorId)
+          .where('isPushedToSale', isEqualTo: true)
           .get();
+      searchedItems.clear();
 
       searchedItems.value = querySnapshot.docs.where((docu) {
         Map<String, dynamic> data = docu.data() as Map<String, dynamic>;
@@ -150,24 +147,23 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchCarouselmages() async {
-    RxList<DocumentSnapshot> items = <DocumentSnapshot>[].obs;
-
+    isCarouselImagesLoading.value = true;
     try {
-      Future.delayed(const Duration(seconds: 3)).then((value) async {
-        QuerySnapshot querySnapshot = await firestore
-            .collection('vendors')
-            .where('uid', isEqualTo: VendorOptions.vendorId)
-            .get();
-        items.value = querySnapshot.docs;
-        addedCartItems.value = items.length;
+      QuerySnapshot querySnapshot = await firestore
+          .collection('vendors')
+          .where('uid', isEqualTo: VendorOptions.vendorId)
+          .get();
 
-        for (var doc in querySnapshot.docs) {
-          String cimages = doc['carouselImages'];
-          carouseImages.add(cimages);
-        }
-      });
+      for (var doc in querySnapshot.docs) {
+        List<dynamic> dynamicList = doc['carouselImages'];
+        List<String> stringList =
+            dynamicList.map((url) => url.toString()).toList();
+        carouseImages.value = stringList;
+      }
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load Carousles');
+      Get.snackbar("Error", 'Failed to load Carousels ${e.toString()}');
+    } finally {
+      isCarouselImagesLoading.value = false;
     }
   }
 
