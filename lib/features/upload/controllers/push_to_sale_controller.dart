@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../commons/widgets/custom_snackbar.dart';
+
 class PushToSaleController extends GetxController {
   TextEditingController rateController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -39,7 +41,7 @@ class PushToSaleController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      CustomSnackbar.show("Error", e.toString());
     }
   }
 

@@ -9,6 +9,7 @@ import 'package:innodify_cust_app/models/invoice_model.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:uuid/uuid.dart';
+import '../../../commons/widgets/custom_snackbar.dart';
 import '../../../constants/utils.dart';
 import '../../../pdf_services/sync_pdf.dart';
 
@@ -43,7 +44,7 @@ class CartController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load cart items');
+      CustomSnackbar.show("Error", 'Failed to load cart items');
     }
   }
 
@@ -69,13 +70,14 @@ class CartController extends GetxController {
             .collection('orders')
             .doc(cartItemId)
             .set(cartItemModel.toJson());
-        Get.snackbar(
+        CustomSnackbar.show(
             "Added item to cart", "You can now order the item from the Cart");
       } else {
-        Get.snackbar("Failed", "Failed to add item to the cart");
+        CustomSnackbar.show("Failed", "Failed to add item to the cart");
       }
     } catch (e) {
-      Get.snackbar("Error", "Error occured while adding item to the cart");
+      CustomSnackbar.show(
+          "Error", "Error occured while adding item to the cart");
     }
   }
 
@@ -110,7 +112,7 @@ ${Uri.encodeFull(dwnldUrl)}
 ''';
 
     dwnldUrl == "web-contdition-unhandled" || dwnldUrl == "error"
-        ? Get.snackbar(
+        ? CustomSnackbar.show(
             'Attention', 'Failed to redirect to Chat, or the platorm is web')
         : launchTheUrl(getWhatsappOrderLink(
             vendorOptionsUpdating.vendorPhoneNumberVar.value, msg));

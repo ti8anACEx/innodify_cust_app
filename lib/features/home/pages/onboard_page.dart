@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -131,14 +132,11 @@ class OnboardPage extends StatelessWidget {
                           // !!!---MANIPULATE THE CHILD HERE---!!!
                           padding: const EdgeInsets.symmetric(horizontal: 7),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(item),
-                                      fit: BoxFit.cover)),
-                            ),
-                          )),
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: item,
+                                fit: BoxFit.cover,
+                              ))),
                     )
                     .toList(),
                 carouselController: homeController.carouselController,

@@ -8,6 +8,7 @@ import 'package:innodify_cust_app/features/auth/controllers/auth_controller.dart
 import 'package:innodify_cust_app/features/cart/controllers/cart_controller.dart';
 import 'package:innodify_cust_app/features/home/controllers/home_controller.dart';
 import 'package:innodify_cust_app/features/home/controllers/item_controller.dart';
+import '../../../commons/widgets/custom_snackbar.dart';
 import '../../product_details/pages/product_details_page.dart';
 
 class CartItemController extends GetxController {
@@ -44,7 +45,7 @@ class CartItemController extends GetxController {
         log('No documents found matching the criteria.');
       }
     } catch (e) {
-      Get.snackbar('Failed', 'Failed to remove from Cart');
+      CustomSnackbar.show('Failed', 'Failed to remove from Cart');
     }
   }
 }

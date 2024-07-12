@@ -4,6 +4,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:innodify_cust_app/features/home/pages/onboard_page.dart';
 import 'package:innodify_cust_app/models/customer_model.dart';
+import 'package:velocity_x/velocity_x.dart';
+import '../../../commons/widgets/custom_snackbar.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/strings.dart';
 import '../pages/login_page.dart';
 import '../pages/splash_page.dart';
 
@@ -100,7 +104,7 @@ class AuthController extends GetxController {
       isSplashing.value = false;
       Get.offAll(() => OnboardPage());
     } catch (e) {
-      Get.snackbar('', '"Error occured while loading details"');
+      CustomSnackbar.show('', '"Error occured while loading details"');
     } finally {
       isLoading.value = false;
     }
@@ -132,15 +136,15 @@ class AuthController extends GetxController {
             .doc(currentUserUID.value)
             .set(customerModel.toJson());
 
-        Get.snackbar("Account Created",
+        CustomSnackbar.show("Account Created",
             "Wassup ${currentUsername.value}, have a great time here!");
         Get.offAll(() => OnboardPage(), transition: Transition.circularReveal);
       } else {
-        Get.snackbar("Failed Creating Account",
+        CustomSnackbar.show("Failed Creating Account",
             "Please make sure you have filled all the details");
       }
     } catch (e) {
-      Get.snackbar("Error Creating Account",
+      CustomSnackbar.show("Error Creating Account",
           "Please make sure you have filled all the details");
     } finally {
       isLoading.value = false;
@@ -161,7 +165,7 @@ class AuthController extends GetxController {
         signUpUser();
       }
     }).catchError((e) {
-      Get.snackbar('Error', "Failed to fetch details $e");
+      CustomSnackbar.show('Error', "Failed to fetch details $e");
     });
   }
 
@@ -177,15 +181,122 @@ class AuthController extends GetxController {
             email: emailController.text.trim(),
             password: passwordController.text.trim());
 
-        Get.snackbar("Success", "Logged in successfully");
+        CustomSnackbar.show("Success", "Logged in successfully");
         Get.offAll(() => OnboardPage(), transition: Transition.circularReveal);
       } else {
-        Get.snackbar("Error Logging in", "Please fill up all the blocks");
+        CustomSnackbar.show(
+            "Error Logging in", "Please fill up all the blocks");
       }
     } catch (e) {
-      Get.snackbar("Error Logging in", '');
+      CustomSnackbar.show("Error Logging in", '');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void showTermsAndConditions(BuildContext context, {bool showLogout = false}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.arrow_back_ios).onTap(() {
+                      Get.back();
+                    }),
+                    "Terms & Conditions and Privacy Policy"
+                        .text
+                        .bold
+                        .size(14)
+                        .make(),
+                    ''.text.make(),
+                  ],
+                ),
+                15.heightBox,
+                const Text(termsAndConditionsString),
+                showLogout
+                    ? Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: "Logout"
+                                .text
+                                .bold
+                                .size(20)
+                                .color(darkPinkColor)
+                                .make()
+                                .onTap(() async {
+                              await FirebaseAuth.instance.signOut();
+                            }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: "Delete Account"
+                                .text
+                                .bold
+                                .size(18)
+                                .color(redColor)
+                                .make()
+                                .onTap(() async {
+                              deleteAcc(context);
+                            }),
+                          )
+                        ],
+                      )
+                    : Container()
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> deleteAcc(BuildContext context) async {
+    try {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              20.heightBox,
+              "Do you want to delete this account for sure?\nThis will delete all your credentials, and\nyou can re-use your phone nummber to\ncreate a new account."
+                  .text
+                  .bold
+                  .make(),
+              20.heightBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  "No"
+                      .text
+                      .color(darkPinkColor.withOpacity(0.5))
+                      .make()
+                      .onTap(() {
+                    Get.back();
+                  }),
+                  "Yes".text.color(redColor).make().onTap(() async {
+                    var uid = currentUserUID.value;
+                    await FirebaseAuth.instance.signOut();
+                    firestore.collection('users').doc(uid).delete();
+                    CustomSnackbar.show(
+                        'Success', 'Account deleted successfully');
+                  }),
+                ],
+              ),
+              20.heightBox,
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      CustomSnackbar.show('error', e.toString());
     }
   }
 }

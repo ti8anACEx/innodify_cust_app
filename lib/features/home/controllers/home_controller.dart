@@ -7,6 +7,7 @@ import 'package:innodify_cust_app/features/cart/pages/cart_page.dart';
 import 'package:innodify_cust_app/features/home/pages/home_page.dart';
 import 'package:innodify_cust_app/features/product_details/pages/product_details_page.dart';
 import 'package:velocity_x/velocity_x.dart';
+import '../../../commons/widgets/custom_snackbar.dart';
 import '../../../constants/colors.dart';
 import '../../auth/controllers/auth_controller.dart';
 import 'item_controller.dart';
@@ -72,7 +73,7 @@ class HomeController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load posts');
+      CustomSnackbar.show("Error", 'Failed to load posts');
     }
   }
 
@@ -98,7 +99,7 @@ class HomeController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar("Error", 'Failed to query');
+      CustomSnackbar.show("Error", 'Failed to query');
     }
   }
 
@@ -126,7 +127,7 @@ class HomeController extends GetxController {
             .contains(searchController.text.toLowerCase()));
       }).toList();
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load items $e');
+      CustomSnackbar.show("Error", 'Failed to load items $e');
     }
   }
 
@@ -142,7 +143,7 @@ class HomeController extends GetxController {
         addedCartItems.value = querySnapshot.docs.length;
       });
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load cart items');
+      CustomSnackbar.show("Error", 'Failed to load cart items');
     }
   }
 
@@ -161,7 +162,7 @@ class HomeController extends GetxController {
         carouseImages.value = stringList;
       }
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load Carousels ${e.toString()}');
+      CustomSnackbar.show("Error", 'Failed to load Carousels ${e.toString()}');
     } finally {
       isCarouselImagesLoading.value = false;
     }
@@ -251,7 +252,7 @@ class HomeController extends GetxController {
       // Update searchedItems with the filtered and sorted documents
       searchedItems.value = filteredDocuments;
     } catch (e) {
-      Get.snackbar("Error", 'Failed to load items $e');
+      CustomSnackbar.show("Error", 'Failed to load items $e');
     }
   }
 

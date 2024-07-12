@@ -2,18 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:innodify_cust_app/commons/widgets/custom_search_bar.dart';
 import 'package:innodify_cust_app/commons/widgets/store_branding.dart';
 import 'package:innodify_cust_app/constants/colors.dart';
 import 'package:innodify_cust_app/features/home/controllers/home_controller.dart';
 import 'package:innodify_cust_app/features/home/widgets/item_card.dart';
-import 'package:innodify_cust_app/features/home/widgets/topic_box.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../../../commons/widgets/custom_progress_indicator.dart';
-import '../../../constants/lists.dart';
+import '../../auth/controllers/auth_controller.dart';
 import '../controllers/item_controller.dart';
 
 // ignore: must_be_immutable
@@ -22,6 +18,7 @@ class HomePage extends StatelessWidget {
 
   HomeController homeController =
       Get.put(HomeController(), tag: 'home-controller');
+  AuthController authController = Get.find(tag: 'auth-controller');
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +59,22 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 10, left: 10, right: 10, bottom: 10),
-                      child: storeBranding(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          storeBranding(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              'T&C '.text.make(),
+                              const Icon(Icons.arrow_outward, size: 15),
+                            ],
+                          ).onTap(() {
+                            authController.showTermsAndConditions(context,
+                                showLogout: true);
+                          }),
+                        ],
+                      ),
                     ),
                     // Search Bar
                     Padding(

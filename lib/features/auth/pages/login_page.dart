@@ -66,7 +66,22 @@ class LoginPage extends StatelessWidget {
                         color: pinkColor,
                       ),
               ),
-              20.heightBox,
+              15.heightBox,
+              Column(
+                children: [
+                  "By logging in, you accept to the".text.size(13).make(),
+                  "Terms & Conditions and Privacy Policy"
+                      .text
+                      .bold
+                      .color(darkPinkColor)
+                      .size(13)
+                      .make()
+                      .onTap(() {
+                    authController.showTermsAndConditions(context);
+                  }),
+                ],
+              ),
+              30.heightBox,
             ],
           ),
         ),
