@@ -30,9 +30,13 @@ class ItemCard extends StatelessWidget {
             children: [
               ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: itemController.pushedImageLinks[0],
-                    fit: BoxFit.fitWidth,
+                  child: Obx(
+                    () => itemController.pushedImageLinks.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: itemController.pushedImageLinks[0],
+                            fit: BoxFit.fitWidth,
+                          )
+                        : Container(),
                   )).onTap(() {
                 homeController.openProductDetails(itemController);
               }),

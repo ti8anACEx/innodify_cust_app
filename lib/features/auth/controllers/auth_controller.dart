@@ -266,7 +266,7 @@ class AuthController extends GetxController {
             mainAxisSize: MainAxisSize.min,
             children: [
               20.heightBox,
-              "Do you want to delete this account for sure?\nThis will delete all your credentials, and\nyou can re-use your phone nummber to\ncreate a new account."
+              "Do you want to delete this account for sure?\nThis will delete all your credentials, and\nyou can re-use your phone number to\ncreate a new account."
                   .text
                   .bold
                   .make(),
