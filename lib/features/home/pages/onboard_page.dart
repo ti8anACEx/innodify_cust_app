@@ -156,8 +156,10 @@ class OnboardPage extends StatelessWidget {
                 children:
                     homeController.carouseImages.asMap().entries.map((entry) {
                   return GestureDetector(
-                    onTap: () => homeController.carouselController
-                        .animateToPage(entry.key),
+                    onTap: () {
+                      // homeController.carouselController
+                      //   .animateToPage(entry.key);
+                    },
                     child: Obx(
                       () => AnimatedContainer(
                         duration: const Duration(milliseconds: 500),

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
           bodyMedium: GoogleFonts.poppins(textStyle: textTheme.bodyMedium),
         ),
-        backgroundColor: backgroundColor,
+        dialogBackgroundColor: bgColor,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import '../../../constants/colors.dart';
 import '../../auth/controllers/auth_controller.dart';
 import 'item_controller.dart';
 import 'topic_box_controller.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 
 class HomeController extends GetxController {
   RxString currentTag = ''.obs;
@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   RxBool isCarouselImagesLoading = false.obs;
   double min = 0, max = 150;
 
-  final CarouselController carouselController = CarouselController();
+  final carouselController = CarouselSliderController();
 
   TextEditingController searchController = TextEditingController();
   TopicBoxController dateTopicBoxController =
@@ -91,7 +91,10 @@ class HomeController extends GetxController {
 
       for (var doc in querySnapshot.docs) {
         String rate = doc['pushedRate'];
-        double r = double.parse(rate);
+        double r = 0.0;
+        if (rate.isNotEmpty && rate != null) {
+          r = double.parse(rate);
+        }
         if (r >= lower && r <= higher) {
           items.add(doc);
         }
@@ -99,7 +102,7 @@ class HomeController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      CustomSnackbar.show("Error", 'Failed to query');
+      CustomSnackbar.show("Error", 'Failed to query : ${e.toString()}');
     }
   }
 
